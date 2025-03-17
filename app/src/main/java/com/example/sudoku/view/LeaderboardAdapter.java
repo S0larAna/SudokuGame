@@ -11,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sudoku.R;
@@ -29,16 +31,15 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_player_details, parent, false);
+                .inflate(R.layout.item_leaderboard, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (cursor == null || !cursor.moveToPosition(position)) {
-            return;
+        if (cursor.moveToPosition(position)) {
+            holder.bind(cursor, position);
         }
-        holder.bind(cursor, position);
     }
 
     @Override
@@ -47,9 +48,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     }
 
     public void swapCursor(Cursor newCursor) {
-        if (cursor != null) {
-            cursor.close();
-        }
+        if (cursor != null) cursor.close();
         cursor = newCursor;
         notifyDataSetChanged();
     }
@@ -57,37 +56,44 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvPosition;
         private final TextView tvUsername;
-        private final TextView tvCountry;
-        private final TextView tvTime;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvPosition = itemView.findViewById(R.id.tv_position);
             tvUsername = itemView.findViewById(R.id.tv_username);
-            tvCountry = itemView.findViewById(R.id.tv_country);
-            tvTime = itemView.findViewById(R.id.tv_time);
 
-            if (tvPosition == null || tvUsername == null || tvCountry == null || tvTime == null) {
-                throw new IllegalStateException("TextView not found in item layout");
+            itemView.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && cursor.moveToPosition(pos) && cursor != null) {
+                    @SuppressLint("Range") String username = cursor.getString(
+                            cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME)
+                    );
+                    showPlayerDetails(username);
+                }
+            });
+        }
+
+        void bind(Cursor cursor, int position) {
+            tvPosition.setText(String.valueOf(position + 1));
+
+            int usernameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME);
+            if (usernameIndex != -1) {
+                tvUsername.setText(cursor.getString(usernameIndex));
             }
         }
 
-        @SuppressLint("Range")
-        void bind(Cursor cursor, int position) {
-            int usernameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME);
-            int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY);
-            int timeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME);
+        private void showPlayerDetails(String username) {
+            FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
 
-            if (usernameIndex == -1 || countryIndex == -1 || timeIndex == -1) {
-                return;
-            }
+            PlayerDetailsFragment fragment = PlayerDetailsFragment.newInstance(username);
 
-            tvPosition.setText(String.valueOf(position + 1));
-            tvUsername.setText(cursor.getString(usernameIndex));
-            tvCountry.setText(cursor.getString(countryIndex));
-            tvTime.setText(cursor.getString(timeIndex));
+            fm.beginTransaction()
+                    .add(android.R.id.content, fragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }
+
 
 

@@ -2,6 +2,7 @@ package com.example.sudoku.view;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,16 +21,25 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
+        // Кнопка возврата
+        Button backButton = findViewById(R.id.btn_back);
+        backButton.setOnClickListener(v -> {
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+
+
+        // Инициализация RecyclerView
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        dbHelper = new DatabaseHelper(this);
         loadData();
     }
 
     private void loadData() {
+        dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getAllScores();
-        adapter = new LeaderboardAdapter(this, cursor); // Используем this для контекста
+        adapter = new LeaderboardAdapter(this, cursor);
         recyclerView.setAdapter(adapter);
     }
 
@@ -37,9 +47,13 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (adapter != null) {
-            adapter.swapCursor(null); // Закрываем курсор при уничтожении
+            adapter.swapCursor(null);
         }
-        dbHelper.close();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
     }
 }
+
+
 

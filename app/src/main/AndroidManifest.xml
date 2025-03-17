@@ -35,8 +35,13 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".view.LeaderboardActivity"
-        android:label="Рейтинг игроков"/>
+            android:name=".view.LeaderboardActivity"
+            android:label="Рейтинг"
+            android:parentActivityName=".view.SudokuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.SudokuActivity"/>
+        </activity>
 
     </application>
 
