@@ -47,6 +47,8 @@ dependencies {
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.fragment:fragment:1.5.5'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation libs.androidx.lifecycle.viewmodel.android
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".view.SudokuActivity">
 
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/leaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="231dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/chronometer"
+        android:text="Рейтинг" />
+
     <com.example.sudoku.view.custom.SudokuBoardView
         android:id="@+id/sudokuBoardView"
         android:layout_width="match_parent"
@@ -70,5 +86,29 @@
             android:layout_height="wrap_content"
             android:text="9" />
     </GridLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="44dp"
+        android:layout_height="51dp"
+        android:layout_alignTop="@+id/buttonsLayout"
+        android:layout_alignBottom="@+id/buttonsLayout"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="58dp"
+        android:layout_toRightOf="@+id/buttonsLayout"
+        android:background="@drawable/ic_delete" />
+
+    <Button
+        android:id="@+id/checkButton"
+        android:layout_width="45dp"
+        android:layout_height="49dp"
+        android:layout_alignTop="@+id/buttonsLayout"
+        android:layout_alignBottom="@+id/buttonsLayout"
+        android:layout_alignParentTop="@+id/buttonsLayout"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="73dp"
+        android:layout_marginBottom="62dp"
+        android:background="@drawable/ic_done" />
 
 </RelativeLayout>
