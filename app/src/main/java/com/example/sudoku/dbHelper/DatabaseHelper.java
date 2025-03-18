@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "sudoku_scores.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String TABLE_SCORES = "scores";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_USERNAME = "username";
@@ -30,13 +30,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Создание таблицы при первом запуске приложения
         db.execSQL(CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Обновление схемы базы данных при изменении версии
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
         onCreate(db);
     }
