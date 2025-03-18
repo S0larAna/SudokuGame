@@ -59,10 +59,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllScores() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_SCORES,
-                new String[]{COLUMN_ID, COLUMN_USERNAME, COLUMN_COUNTRY, COLUMN_TIME},
-                null, null, null, null, COLUMN_TIME + " ASC");
+
+        String query = "SELECT * FROM " + TABLE_SCORES +
+                " ORDER BY (" +
+                "substr('00:00:00', 1, 8 - length(" + COLUMN_TIME + ")) || " + COLUMN_TIME +
+                ") ASC";
+
+        return db.rawQuery(query, null);
     }
+
 
     public Cursor getPlayerDetails(String username) {
         SQLiteDatabase db = getReadableDatabase();
